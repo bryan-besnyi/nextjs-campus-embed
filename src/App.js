@@ -83,10 +83,6 @@ function App() {
         )}
         <Outlet />
       </main>
-
-      <footer>
-        <p>© 2024 San Mateo County Community College District</p>
-      </footer>
     </div>
   );
 }
