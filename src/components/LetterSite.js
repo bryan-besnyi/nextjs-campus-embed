@@ -5,20 +5,28 @@ import DOMPurify from "dompurify";
 const LetterSite = () => {
   const { letter } = useParams();
   const [letterSites, setLetterSites] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    setIsLoading(true);
     fetch(
-      `http://localhost:3000/api/indexItems?letter=${letter}&campus=Skyline%20College`
+      `https://site-index.smccd.edu/api/indexItems?campus=Skyline%20College&letter=${letter}`
     )
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
         return response.json();
       })
-      .then((data) => setLetterSites(data))
+      .then((data) => {
+        setLetterSites(data);
+        setIsLoading(false);
+      })
       .catch((error) => {
         console.error("Failed to fetch sites", error);
+        setError(error.message);
+        setIsLoading(false);
       });
   }, [letter]);
 
@@ -26,12 +34,24 @@ const LetterSite = () => {
     return DOMPurify.sanitize(url);
   }
 
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (letterSites.length === 0) {
+    return <p>No sites to display</p>;
+  }
+
   return (
     <div>
       <h2>Sites for "{letter.toUpperCase()}"</h2>
       <ul>
         {letterSites.map((site, index) => (
-          <li key={index}>
+          <li key={site.id || index}>
             <a
               href={sanitizeUrl(site.url)}
               target="_blank"

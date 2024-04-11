@@ -6,7 +6,7 @@ const SearchResults = () => {
   const [results, setResults] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/indexItems?search=${query}`)
+    fetch(`https://site-index.smccd.edu/api/indexItems?search=${query}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

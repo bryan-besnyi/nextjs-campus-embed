@@ -1,90 +1,69 @@
-import React, { useEffect } from "react";
-import { Outlet, Link, useNavigate } from "react-router-dom";
-import useSearch from "./hooks/useSearch";
+import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import AllSites from "./components/AllSites";
+import LetterSite from "./components/LetterSite";
+import SearchResults from "./components/SearchResults";
+import Navbar from "./components/Navbar";
 
-function App() {
-  const {
-    items: sites,
-    setItems: setSites,
-    searchTerm,
-    handleSearchChange,
-  } = useSearch([]);
-
-  const navigate = useNavigate();
-
-  const handleSearchSubmit = (event) => {
-    event.preventDefault();
-    navigate(`/search/${searchTerm}`);
-  };
+const App = () => {
+  const [allSites, setAllSites] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/indexItems`)
+    setIsLoading(true);
+    fetch(`https://site-index.smccd.edu/api/indexItems`)
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
         return response.json();
       })
-      .then((data) => setSites(data))
+      .then((data) => {
+        const grouped = data.reduce((groups, site) => {
+          const letter = site.title[0].toUpperCase();
+          if (!groups[letter]) {
+            groups[letter] = [];
+          }
+          groups[letter].push(site);
+          return groups;
+        }, {});
+
+        const sortedGroups = Object.entries(grouped).sort(
+          ([letterA], [letterB]) => letterA.localeCompare(letterB)
+        );
+
+        setAllSites(sortedGroups);
+        setIsLoading(false);
+      })
       .catch((error) => {
         console.error("Failed to fetch sites", error);
+        setError(error.message);
+        setIsLoading(false);
       });
-  }, [setSites]);
+  }, []);
+
+  // Render logic
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (isLoading) {
+    return <div className="container">Loading...</div>;
+  }
 
   return (
-    <div>
-      <header>
-        <nav style={{ marginTop: "15px", display: "flex", gap: "10px" }}>
-          <Link to="/all">All</Link>
-          <Link to="/a">A</Link>
-          <Link to="/b">B</Link>
-          <Link to="/c">C</Link>
-          <Link to="/d">D</Link>
-          <Link to="/e">E</Link>
-          <Link to="/f">F</Link>
-          <Link to="/g">G</Link>
-          <Link to="/h">H</Link>
-          <Link to="/i">I</Link>
-          <Link to="/j">J</Link>
-          <Link to="/k">K</Link>
-          <Link to="/l">L</Link>
-          <Link to="/m">M</Link>
-          <Link to="/n">N</Link>
-          <Link to="/o">O</Link>
-          <Link to="/p">P</Link>
-          <Link to="/q">Q</Link>
-          <Link to="/r">R</Link>
-          <Link to="/s">S</Link>
-          <Link to="/t">T</Link>
-          <Link to="/u">U</Link>
-          <Link to="/v">V</Link>
-          <Link to="/w">W</Link>
-          <Link to="/x">X</Link>
-          <Link to="/y">Y</Link>
-          <Link to="/z">Z</Link>
-        </nav>
-      </header>
-
-      <main>
-        <form onSubmit={handleSearchSubmit}>
-          <input type="text" value={searchTerm} onChange={handleSearchChange} />
-          <button type="submit">Search</button>
-        </form>
-        {searchTerm && (
-          <ul>
-            {sites.map((site, index) => (
-              <li key={index}>
-                <a href={site.url} target="_blank" rel="noopener noreferrer">
-                  {site.title}
-                </a>
-              </li>
-            ))}
-          </ul>
-        )}
-        <Outlet />
-      </main>
-    </div>
+    <Router basename="/search/zaindex">
+      <Navbar />
+      <div className="container">
+        <Routes>
+          <Route path="/" element={<AllSites sortedGroups={allSites} />} />
+          <Route path=":letter" element={<LetterSite />} />
+          <Route path="search/:query" element={<SearchResults />} />
+        </Routes>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;

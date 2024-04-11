@@ -1,34 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
-const AllSites = () => {
-  const [sites, setSites] = useState([]);
-
-  useEffect(() => {
-    fetch(`http://localhost:3000/api/indexItems`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => setSites(data))
-      .catch((error) => {
-        console.error("Failed to fetch sites", error);
-      });
-  }, []);
-
+const AllSites = ({ sortedGroups }) => {
   return (
     <div>
-      <h2>All Sites</h2>
-      <ul>
-        {sites.map((site, index) => (
-          <li key={index}>
-            <a href={site.url} target="_blank" rel="noopener noreferrer">
-              {site.title}
-            </a>
-          </li>
-        ))}
-      </ul>
+      {sortedGroups.map(([letter, sites]) => (
+        <section key={letter}>
+          <h2>{letter}</h2>
+          <ul>
+            {sites.map((site) => (
+              <li key={site.id}>
+                {" "}
+                <a href={site.url} target="_blank" rel="noopener noreferrer">
+                  {site.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
     </div>
   );
 };
