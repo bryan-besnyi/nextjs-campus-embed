@@ -1,35 +1,62 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 const SearchResults = () => {
-  const { query } = useParams();
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("query");
   const [results, setResults] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch(`https://site-index.smccd.edu/api/indexItems?search=${query}`)
-      .then((response) => {
+    // Define an async function that will fetch data
+    const fetchData = async () => {
+      try {
+        // Use template literals and encodeURI for the query parameter
+        const response = await fetch(
+          `https://site-index.smccd.edu/api/indexItems?search=${encodeURI(
+            query
+          )}`
+        );
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        return response.json();
-      })
-      .then((data) => setResults(data))
-      .catch((error) => {
-        console.error("Failed to fetch search results", error);
-      });
+        const data = await response.json();
+        setResults(data);
+      } catch (error) {
+        console.error("Failed to fetch search results:", error);
+        setError(error.message);
+      }
+    };
+
+    // Call the fetchData function if 'query' is present
+    if (query) {
+      fetchData();
+    } else {
+      // If there's no query, we can reset the results
+      setResults([]);
+    }
   }, [query]);
 
+  if (error) {
+    return <div>Error fetching results: {error}</div>;
+  }
+
+  // Render the search results or a message if no query is provided
   return (
     <div>
-      <ul>
-        {results.map((result, index) => (
-          <li key={index}>
-            <a href={result.url} target="_blank" rel="noopener noreferrer">
-              {result.title}
-            </a>
-          </li>
-        ))}
-      </ul>
+      {query ? (
+        <ul>
+          {results.map((result, index) => (
+            <li key={index}>
+              <a href={result.url} target="_blank" rel="noopener noreferrer">
+                {result.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>Please enter a search term.</p>
+      )}
     </div>
   );
 };

@@ -59,7 +59,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<AllSites sortedGroups={allSites} />} />
           <Route path=":letter" element={<LetterSite />} />
-          <Route path="search/:query" element={<SearchResults />} />
+          <Route path="/search" element={<SearchResults />} />
         </Routes>
       </div>
     </Router>

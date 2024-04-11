@@ -10,7 +10,7 @@ export default function Header() {
   };
 
   const handleSearchClick = () => {
-    navigate(`/search/${inputValue}`);
+    navigate(`/search?query=${encodeURIComponent(inputValue)}`);
   };
 
   return (
