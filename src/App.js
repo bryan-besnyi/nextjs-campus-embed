@@ -15,7 +15,7 @@ const App = () => {
       setIsLoading(true);
       try {
         const response = await fetch(
-          `http://localhost:3000/api/indexItems?campus=Skyline%20College`
+          `https://site-index.smccd.edu/api/indexItems?campus=Skyline%20College`
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);

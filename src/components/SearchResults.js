@@ -13,7 +13,9 @@ const SearchResults = () => {
       try {
         // Use template literals and encodeURI for the query parameter
         const response = await fetch(
-          `http://localhost:3000/api/indexItems?search=${encodeURI(query)}`
+          `https://site-index.smccd.edu/api/indexItems?search=${encodeURI(
+            query
+          )}`
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);

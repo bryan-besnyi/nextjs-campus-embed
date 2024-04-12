@@ -11,7 +11,7 @@ const LetterSite = () => {
   useEffect(() => {
     setIsLoading(true);
     fetch(
-      `http://localhost:3000/api/indexItems?campus=Skyline%20College&letter=${letter}`
+      `https://site-index.smccd.edu/api/indexItems?campus=Skyline%20College&letter=${letter}`
     )
       .then((response) => {
         if (!response.ok) {

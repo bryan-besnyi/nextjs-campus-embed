@@ -7,7 +7,7 @@
 //   const [error, setError] = useState(""); // New state for handling errors
 
 //   useEffect(() => {
-//     fetch(`http://localhost:3000/api/indexItems?campus=Skyline%20College`)
+//     fetch(`https://site-index.smccd.edu/api/indexItems?campus=Skyline%20College`)
 //       .then((response) => {
 //         if (!response.ok) {
 //           throw new Error("Network response was not ok");
