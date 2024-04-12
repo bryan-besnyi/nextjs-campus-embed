@@ -11,15 +11,16 @@ const App = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    setIsLoading(true);
-    fetch(`https://site-index.smccd.edu/api/indexItems`)
-      .then((response) => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch(
+          `http://localhost:3000/api/indexItems?campus=Skyline%20College`
+        );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        return response.json();
-      })
-      .then((data) => {
+        const data = await response.json();
         const grouped = data.reduce((groups, site) => {
           const letter = site.title[0].toUpperCase();
           if (!groups[letter]) {
@@ -35,15 +36,16 @@ const App = () => {
 
         setAllSites(sortedGroups);
         setIsLoading(false);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Failed to fetch sites", error);
         setError(error.message);
         setIsLoading(false);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
 
-  // Render logic
   if (error) {
     return <div>Error: {error}</div>;
   }
