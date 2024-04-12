@@ -15,7 +15,7 @@ const App = () => {
       setIsLoading(true);
       try {
         const response = await fetch(
-          `https://site-index.smccd.edu/api/indexItems?campus=Skyline%20College`
+          `https://site-index.smccd.edu/api/indexItems?campus=Cañada%20College`
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -55,7 +55,7 @@ const App = () => {
   }
 
   return (
-    <Router basename="/search/zaindex">
+    <Router basename="/a-z/z-a">
       <Navbar />
       <div className="container">
         <Routes>

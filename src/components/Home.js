@@ -9,9 +9,7 @@ const Home = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    fetch(
-      "https://site-index.smccd.edu/api/indexItems?campus=Skyline%20College"
-    )
+    fetch("https://site-index.smccd.edu/api/indexItems?campus=Cañada%20College")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

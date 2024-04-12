@@ -2,7 +2,7 @@
   "name": "nextjs-campus-embed",
   "version": "0.1.0",
   "private": true,
-  "homepage": "/search/zaindex",
+  "homepage": "/a-z/z-a",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
