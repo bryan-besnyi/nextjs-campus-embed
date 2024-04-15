@@ -7,9 +7,13 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const campus = process.env.REACT_APP_CAMPUS_NAME;
+
   useEffect(() => {
     setIsLoading(true);
-    fetch("https://site-index.smccd.edu/api/indexItems?campus=Cañada%20College")
+    fetch(
+      `https://site-index.smccd.edu/api/indexItems?campus=${encodeURI(campus)}`
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

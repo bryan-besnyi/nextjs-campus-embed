@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { sanitize } from "../utils/sanitize";
 
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
@@ -7,15 +8,15 @@ const SearchResults = () => {
   const [results, setResults] = useState([]);
   const [error, setError] = useState(null);
 
+  const campus = process.env.REACT_APP_CAMPUS_NAME;
+
   useEffect(() => {
-    // Define an async function that will fetch data
     const fetchData = async () => {
       try {
-        // Use template literals and encodeURI for the query parameter
         const response = await fetch(
-          `https://site-index.smccd.edu/api/indexItems?search=${encodeURI(
-            query
-          )}`
+          `https://site-index.smccd.edu/api/indexItems?campus=${encodeURI(
+            campus
+          )}&search=${encodeURI(query)}`
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -43,13 +44,16 @@ const SearchResults = () => {
 
   return (
     <div>
-      <h2>{query && `Showing Search Results for "${query}"`}</h2>
       {query ? (
         <ul>
           {results.map((result, index) => (
             <li key={index}>
-              <a href={result.url} target="_blank" rel="noopener noreferrer">
-                {result.title}
+              <a
+                href={sanitize(result.url)}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {sanitize(result.title)}
               </a>
             </li>
           ))}

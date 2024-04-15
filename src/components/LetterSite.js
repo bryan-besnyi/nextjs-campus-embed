@@ -8,10 +8,14 @@ const LetterSite = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const campus = process.env.REACT_APP_CAMPUS_NAME;
+
   useEffect(() => {
     setIsLoading(true);
     fetch(
-      `https://site-index.smccd.edu/api/indexItems?campus=Cañada%20College&letter=${letter}`
+      `https://site-index.smccd.edu/api/indexItems?campus=${encodeURI(
+        campus
+      )}&letter=${letter}`
     )
       .then((response) => {
         if (!response.ok) {

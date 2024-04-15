@@ -9,7 +9,8 @@ export default function Header() {
     setInputValue(event.target.value);
   };
 
-  const handleSearchClick = () => {
+  const handleSearch = (event) => {
+    event.preventDefault();
     navigate(`/search?query=${encodeURIComponent(inputValue)}`);
   };
 
@@ -100,20 +101,22 @@ export default function Header() {
               <Link to="/z">Z</Link>
             </li>
           </ul>
-          <div className="col-md-9">
-            <input
-              type="text"
-              className="form-control"
-              value={inputValue}
-              onChange={handleInputChange}
-              placeholder="Search..."
-            />
-          </div>
-          <div className="col-md-3">
-            <button className="btn btn-warning" onClick={handleSearchClick}>
-              Search A - Z Index
-            </button>
-          </div>
+          <form onSubmit={handleSearch} className="row">
+            <div className="col-md-9">
+              <input
+                type="text"
+                className="form-control"
+                value={inputValue}
+                onChange={handleInputChange}
+                placeholder="Search..."
+              />
+            </div>
+            <div className="col-md-3">
+              <button type="submit" className="btn btn-warning">
+                Search A - Z Index
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </header>

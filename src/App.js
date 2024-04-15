@@ -10,12 +10,16 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const campus = process.env.REACT_APP_CAMPUS_NAME;
+
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
         const response = await fetch(
-          `https://site-index.smccd.edu/api/indexItems?campus=Cañada%20College`
+          `https://site-index.smccd.edu/api/indexItems?campus=${encodeURI(
+            campus
+          )}`
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
