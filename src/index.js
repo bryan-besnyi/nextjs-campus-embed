@@ -1,14 +1,17 @@
 import React from "react";
-import { createRoot } from "react-dom/client";
+import { createRoot } from "react-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
 import App from "./App";
 
-<div id="root">Issue Loading Site-Index</div>;
+const queryClient = new QueryClient();
 
 const container = document.getElementById("root");
 const root = createRoot(container);
 
 root.render(
   <React.StrictMode>
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
   </React.StrictMode>
 );

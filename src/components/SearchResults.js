@@ -36,7 +36,7 @@ const SearchResults = () => {
       // If there's no query, we can reset the results
       setResults([]);
     }
-  }, [query]);
+  }, [campus, query]);
 
   if (error) {
     return <div>Error fetching results: {error}</div>;

@@ -9,7 +9,6 @@ const AllSites = ({ sortedGroups }) => {
           <ul>
             {sites.map((site) => (
               <li key={site.id}>
-                {" "}
                 <a href={site.url} target="_blank" rel="noopener noreferrer">
                   {site.title}
                 </a>

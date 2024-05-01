@@ -32,7 +32,7 @@ const LetterSite = () => {
         setError(error.message);
         setIsLoading(false);
       });
-  }, [letter]);
+  }, [campus, letter]);
 
   function sanitizeUrl(url) {
     return DOMPurify.sanitize(url);
